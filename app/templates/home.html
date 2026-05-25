@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>NexTask - Home</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="page-body">
+
+    <h1 class="page-title">🚀 NexTask - Os Meus Quadros</h1>
+    <p class="page-description">Seleciona um quadro de trabalho para gerir as tuas tarefas.</p>
+    <hr class="divider">
+
+    <div class="card-grid">
+        {% for board in boards %}
+            <div class="card">
+                <h3 class="card-title">📋 {{ board.title }}</h3>
+                <p class="card-text">{{ board.description|default:"Sem descrição disponível." }}</p>
+                <a class="button-primary" href="{% url 'board' board.id %}">
+                    Abrir Board ➔
+                </a>
+            </div>
+        {% empty %}
+            <p>Ainda não tens nenhum Board criado. (Podes criar um no painel de administração do Django em /admin).</p>
+        {% endfor %}
+    </div>
+
+</body>
+</html>

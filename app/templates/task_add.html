@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>NexTask - Adicionar Cartão</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="page-body">
+
+    <nav class="nav">
+        <a class="link-secondary" href="{% url 'task_list' %}">⬅ Voltar para Todos os Cartões</a>
+    </nav>
+
+    <h1 class="page-title">➕ Criar Novo Cartão</h1>
+    <p class="page-description">Escolhe o quadro e adiciona um novo cartão para começar a trabalhar.</p>
+    <hr class="divider">
+
+    <div class="card">
+        <form method="POST" class="task-form task-form-single">
+            {% csrf_token %}
+            <label class="form-label">Quadro</label>
+            <select name="board" class="form-select" required>
+                <option value="">Seleciona um quadro</option>
+                {% for board in boards %}
+                    <option value="{{ board.id }}">{{ board.title }}</option>
+                {% endfor %}
+            </select>
+
+            <label class="form-label">Título</label>
+            <input type="text" name="title" required class="form-input" placeholder="Título do cartão">
+
+            <label class="form-label">Descrição</label>
+            <textarea name="description" rows="5" class="form-textarea" placeholder="Descrição do cartão"></textarea>
+
+            <label class="form-label">Estado</label>
+            <select name="status" class="form-select">
+                <option value="PENDING" selected>Pendente</option>
+                <option value="IN_PROGRESS">Em Progresso</option>
+                <option value="DONE">Concluída</option>
+            </select>
+
+            <label class="form-label">Prioridade</label>
+            <select name="priority" class="form-select">
+                <option value="LOW">Baixa</option>
+                <option value="MEDIUM" selected>Média</option>
+                <option value="HIGH">Alta</option>
+            </select>
+
+            <button type="submit" class="button-success full-width">Adicionar Cartão</button>
+        </form>
+    </div>
+
+</body>
+</html>

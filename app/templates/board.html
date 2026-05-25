@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -16,73 +16,69 @@
     <p class="page-description">{{ board.description }}</p>
     <hr class="divider">
 
-    <h3 class="section-title">🔍 Filtrar Tarefas</h3>
-    <form method="GET" class="filter-form">
-        <label class="form-label">Estado:
-            <select name="status" class="form-select">
-                <option value="">Todos</option>
-                <option value="PENDING" {% if status_filter == 'PENDING' %}selected{% endif %}>Pendente</option>
-                <option value="IN_PROGRESS" {% if status_filter == 'IN_PROGRESS' %}selected{% endif %}>Em Progresso</option>
-                <option value="DONE" {% if status_filter == 'DONE' %}selected{% endif %}>Concluída</option>
-            </select>
-        </label>
-
-        <label class="form-label">Prioridade:
-            <select name="priority" class="form-select">
-                <option value="">Todas</option>
-                <option value="LOW" {% if priority_filter == 'LOW' %}selected{% endif %}>Baixa</option>
-                <option value="MEDIUM" {% if priority_filter == 'MEDIUM' %}selected{% endif %}>Média</option>
-                <option value="HIGH" {% if priority_filter == 'HIGH' %}selected{% endif %}>Alta</option>
-            </select>
-        </label>
-
-        <button type="submit" class="button-secondary">Aplicar</button>
-        <a class="link-reset" href="{% url 'board' board.id %}">Limpar Filtros</a>
-    </form>
-
-    <br>
-
-    <h3 class="section-title">➕ Nova Tarefa para este Board</h3>
-    <form method="POST" class="task-form form-row">
-        {% csrf_token %}
-        <input type="text" name="title" placeholder="Título da tarefa" required class="form-input form-input-large">
-        <input type="text" name="description" placeholder="Descrição (Opcional)" class="form-input form-input-large">
-        
-        <select name="status" class="form-select">
-            <option value="PENDING" selected>Estado Pendente</option>
-            <option value="IN_PROGRESS">Em Progresso</option>
-            <option value="DONE">Concluída</option>
-        </select>
-        
-        <select name="priority" class="form-select">
-            <option value="LOW">Prioridade Baixa</option>
-            <option value="MEDIUM" selected>Prioridade Média</option>
-            <option value="HIGH">Prioridade Alta</option>
-        </select>
-        
-        <button type="submit" class="button-success">Adicionar Task</button>
-    </form>
-
-    <br>
-
-    <h3 class="section-title">⚡ Cartões Ativos ({{ tasks.count }})</h3>
-    <div class="task-list">
-        {% for task in tasks %}
-            <div class="task-card">
-                <div>
-                    <h4 class="card-title">{{ task.title }}</h4>
-                    <p class="card-text">{{ task.description }}</p>
-                    <span class="badge badge-muted">P: <strong>{{ task.get_priority_display }}</strong></span>
-                    <span class="badge badge-status">Status: <strong>{{ task.get_status_display }}</strong></span>
-                </div>
-                <div class="task-actions">
-                    <a class="text-link" href="{% url 'task' task.id %}">🔎 Editar</a>
-                    <a class="text-link delete-link" href="{% url 'task_delete' task.id %}" onclick="return confirm('Apagar esta tarefa em definitivo do NexTask?')">❌ Apagar</a>
-                </div>
+    <div class="card">
+        <h3 class="section-title">🔍 Filtrar Tarefas</h3>
+        <form method="GET" class="filter-form">
+            <div class="filter-field">
+                <label class="form-label">Estado</label>
+                <select name="status" class="form-select">
+                    <option value="">Todos</option>
+                    <option value="PENDING" {% if status_filter == 'PENDING' %}selected{% endif %}>Pendente</option>
+                    <option value="IN_PROGRESS" {% if status_filter == 'IN_PROGRESS' %}selected{% endif %}>Em Progresso</option>
+                    <option value="DONE" {% if status_filter == 'DONE' %}selected{% endif %}>Concluída</option>
+                </select>
             </div>
-        {% empty %}
-            <p class="empty-text">Nenhuma tarefa encontrada neste quadro.</p>
-        {% endfor %}
+
+            <div class="filter-field">
+                <label class="form-label">Prioridade</label>
+                <select name="priority" class="form-select">
+                    <option value="">Todas</option>
+                    <option value="LOW" {% if priority_filter == 'LOW' %}selected{% endif %}>Baixa</option>
+                    <option value="MEDIUM" {% if priority_filter == 'MEDIUM' %}selected{% endif %}>Média</option>
+                    <option value="HIGH" {% if priority_filter == 'HIGH' %}selected{% endif %}>Alta</option>
+                </select>
+            </div>
+
+            <div class="filter-submit-row">
+                <button type="submit" class="button-secondary">Aplicar</button>
+                <a class="link-reset" href="{% url 'board' board.id %}">Limpar Filtros</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="button-row">
+        <a class="button-secondary" href="{% url 'task_list' %}">Ver Todos os Cartões</a>
+        <a class="button-success" href="{% url 'task_add' %}">Adicionar Novo Cartão</a>
+    </div>
+
+    <br>
+
+    <!-- 'Nova Tarefa' card removed as requested -->
+
+    <br>
+
+    <div class="card">
+        <h3 class="section-title">⚡ Cartões Ativos ({{ tasks.count }})</h3>
+        <div class="task-list">
+            {% for task in tasks %}
+                <div class="task-card">
+                    <a class="card-link" href="{% url 'task' task.id %}">
+                        <div>
+                            <h4 class="card-title">{{ task.title }}</h4>
+                            <p class="card-text">{{ task.description }}</p>
+                            <span class="badge badge-muted">P: <strong>{{ task.get_priority_display }}</strong></span>
+                            <span class="badge badge-status">Status: <strong>{{ task.get_status_display }}</strong></span>
+                        </div>
+                    </a>
+                    <div class="task-actions">
+                        <a class="button-secondary" href="{% url 'task_edit' task.id %}">✏️ Editar</a>
+                        <a class="text-link delete-link" href="{% url 'task_delete' task.id %}" onclick="return confirm('Apagar esta tarefa em definitivo do NexTask?')">❌ Apagar</a>
+                    </div>
+                </div>
+            {% empty %}
+                <p class="empty-text">Nenhuma tarefa encontrada neste quadro.</p>
+            {% endfor %}
+        </div>
     </div>
 
 </body>

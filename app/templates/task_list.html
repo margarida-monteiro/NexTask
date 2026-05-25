@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>NexTask - Todos os Cartões</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="page-body">
+
+    <nav class="nav">
+        <a class="link-secondary" href="{% url 'home' %}">⬅ Voltar para os Quadros</a>
+    </nav>
+
+    <div class="button-row">
+        <a class="button-success" href="{% url 'task_add' %}">Adicionar Novo Cartão</a>
+    </div>
+
+    <h1 class="page-title">📍 Todos os Cartões</h1>
+    <p class="page-description">Veja todas as tarefas de todos os quadros e filtre por quadro, estado e prioridade.</p>
+    <hr class="divider">
+
+    <div class="card">
+        <h3 class="section-title">🔎 Filtros</h3>
+        <form method="GET" class="filter-form">
+            <div class="filter-field">
+                <label class="form-label">Quadro</label>
+                <select name="board" class="form-select">
+                    <option value="">Todos</option>
+                    {% for board in boards %}
+                        <option value="{{ board.id }}" {% if board_filter == board.id|stringformat:'s' %}selected{% endif %}>{{ board.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="filter-field">
+                <label class="form-label">Estado</label>
+                <select name="status" class="form-select">
+                    <option value="">Todos</option>
+                    <option value="PENDING" {% if status_filter == 'PENDING' %}selected{% endif %}>Pendente</option>
+                    <option value="IN_PROGRESS" {% if status_filter == 'IN_PROGRESS' %}selected{% endif %}>Em Progresso</option>
+                    <option value="DONE" {% if status_filter == 'DONE' %}selected{% endif %}>Concluída</option>
+                </select>
+            </div>
+            <div class="filter-field">
+                <label class="form-label">Prioridade</label>
+                <select name="priority" class="form-select">
+                    <option value="">Todas</option>
+                    <option value="LOW" {% if priority_filter == 'LOW' %}selected{% endif %}>Baixa</option>
+                    <option value="MEDIUM" {% if priority_filter == 'MEDIUM' %}selected{% endif %}>Média</option>
+                    <option value="HIGH" {% if priority_filter == 'HIGH' %}selected{% endif %}>Alta</option>
+                </select>
+            </div>
+            <div class="filter-submit-row">
+                <button type="submit" class="button-secondary">Aplicar Filtros</button>
+                <a class="link-reset" href="{% url 'task_list' %}">Limpar</a>
+            </div>
+        </form>
+    </div>
+
+    <br>
+
+    <div class="card-grid">
+        {% for task in tasks %}
+            <div class="card">
+                <a class="card-link" href="{% url 'task' task.id %}">
+                    <div>
+                        <h3 class="card-title">{{ task.title }}</h3>
+                        <p class="card-text">{{ task.description|default:'Sem descrição' }}</p>
+                        <p class="meta-text">Quadro: <strong>{{ task.board.title }}</strong></p>
+                        <p class="meta-text">Estado: <strong>{{ task.get_status_display }}</strong> • Prioridade: <strong>{{ task.get_priority_display }}</strong></p>
+                        <p class="meta-text">👍 {{ task.like_count }} • 💬 {{ task.comments.count }}</p>
+                    </div>
+                </a>
+                <div class="task-actions">
+                    <a class="button-secondary" href="{% url 'task_edit' task.id %}">✏️ Editar</a>
+                </div>
+            </div>
+        {% empty %}
+            <div class="card">
+                <p class="empty-text">Não existem cartões no momento.</p>
+            </div>
+        {% endfor %}
+    </div>
+
+</body>
+</html>

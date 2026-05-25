@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -10,6 +10,21 @@
 
     <h1 class="page-title">🚀 NexTask - Os Meus Quadros</h1>
     <p class="page-description">Seleciona um quadro de trabalho para gerir as tuas tarefas.</p>
+    <hr class="divider">
+
+    <div class="card-grid">
+        <div class="card">
+            <h3 class="card-title">📌 Ver Todos os Cartões</h3>
+            <p class="card-text">Veja todas as tarefas do NexTask num único lugar e filtre por quadro, estado e prioridade.</p>
+            <a class="button-secondary" href="{% url 'task_list' %}">Ver Todos</a>
+        </div>
+        <div class="card">
+            <h3 class="card-title">➕ Adicionar Novo Cartão</h3>
+            <p class="card-text">Crie um novo cartão para qualquer quadro rapidamente.</p>
+            <a class="button-success" href="{% url 'task_add' %}">Novo Cartão</a>
+        </div>
+    </div>
+
     <hr class="divider">
 
     <div class="card-grid">

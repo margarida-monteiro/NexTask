@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>NexTask - Editar Cartão</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="page-body">
+
+    <nav class="nav">
+        <a class="link-secondary" href="{% url 'task' task.id %}">⬅ Voltar para o Cartão</a>
+    </nav>
+
+    <div class="button-row">
+        <a class="button-secondary" href="{% url 'task_list' %}">Ver Todos os Cartões</a>
+        <a class="button-success" href="{% url 'task_add' %}">Adicionar Novo Cartão</a>
+    </div>
+
+    <h1 class="page-title">✏️ Editar Cartão ({{ task.title }})</h1>
+    <hr class="divider">
+
+    <div class="card">
+        <form method="POST" class="task-form task-form-single">
+            {% csrf_token %}
+            <label class="form-label">Título</label>
+            <input type="text" name="title" value="{{ task.title }}" required class="form-input">
+
+            <label class="form-label">Descrição</label>
+            <textarea name="description" rows="5" class="form-textarea">{{ task.description }}</textarea>
+
+            <label class="form-label">Estado</label>
+            <select name="status" class="form-select">
+                <option value="PENDING" {% if task.status == 'PENDING' %}selected{% endif %}>Pendente</option>
+                <option value="IN_PROGRESS" {% if task.status == 'IN_PROGRESS' %}selected{% endif %}>Em Progresso</option>
+                <option value="DONE" {% if task.status == 'DONE' %}selected{% endif %}>Concluída</option>
+            </select>
+
+            <label class="form-label">Prioridade</label>
+            <select name="priority" class="form-select">
+                <option value="LOW" {% if task.priority == 'LOW' %}selected{% endif %}>Baixa</option>
+                <option value="MEDIUM" {% if task.priority == 'MEDIUM' %}selected{% endif %}>Média</option>
+                <option value="HIGH" {% if task.priority == 'HIGH' %}selected{% endif %}>Alta</option>
+            </select>
+
+            <p class="meta-text">Criada em: {{ task.created_at }} | Última alteração: {{ task.updated_at }}</p>
+
+            <button type="submit" class="button-primary full-width">💾 Guardar Alterações</button>
+        </form>
+    </div>
+
+</body>
+</html>
